@@ -1,0 +1,54 @@
+# kubectl create clusterrolebinding exporter-cluster-role --clusterrole=cluster-admin --serviceaccount=kube-system:default
+# curl volume-usage-exporter.kube-system.svc.cluster.local:9001/metrics
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: volume-usage-exporter
+  namespace: kube-system
+  labels:
+    app: exporter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: exporter
+  template:
+    metadata:
+      labels:
+        app: exporter
+    spec:
+      containers:
+      - name: volume-usage-exporter
+        image: medinvention/kubernetes-volume-usage-prometheus-metric:0.0.1
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 9001
+          initialDelaySeconds: 15
+          periodSeconds: 3
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "1"
+        ports:
+        - containerPort: 9001
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: volume-usage-exporter
+  namespace: kube-system
+spec:
+  ports:
+  - name: http
+    port: 9001
+    targetPort: 9001
+  selector:
+    app: exporter
