@@ -1,5 +1,5 @@
 
-# Kuberenetes Volume Usage Prometheus Metric (kubelet way)
+# Kubernetes Volume Usage Prometheus Metrics(kubelet way)
 
 ## Deploy
 
@@ -33,4 +33,5 @@ docker build --tag kubernetes-volume-usage-prometheus-metric:local . -f Dockerfi
 ### References
 
 - https://github.com/kubernetes/kubernetes/pull/51553
-- https://github.com/kubernetes/community/pull/855
+- https://github.com/kubernetes/community/pull/855-
+- https://github.com/mmohamed/kubernetes-volume-usage-prometheus-metric 
